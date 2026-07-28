@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Note Example icon">
+  <rect width="512" height="512" rx="96" fill="#f8fafc"/>
+  <rect x="116" y="72" width="280" height="368" rx="34" fill="#ffffff" stroke="#0f172a" stroke-width="18"/>
+  <path d="M168 160h176M168 222h176M168 284h128" stroke="#2563eb" stroke-width="24" stroke-linecap="round"/>
+  <path d="M168 352h92" stroke="#14b8a6" stroke-width="24" stroke-linecap="round"/>
+  <path d="M206 72h100v62H206z" fill="#e2e8f0" stroke="#0f172a" stroke-width="18" stroke-linejoin="round"/>
+</svg>

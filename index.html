@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f8fafc" />
+    <meta name="description" content="A local-first note example with optional Myfield bucket sync." />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <title>Note Example</title>
+  </head>
+  <body>
+    <div id="app" class="workspace">
+      <aside class="sidebar">
+        <header class="sidebar-header">
+          <h1>Note</h1>
+          <button id="newNoteButton" class="icon-button" type="button" title="New note" aria-label="New note">
+            <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M16.77 4.04 19.96 7.23l-8.5 8.5H8.27v-3.19l8.5-8.5Zm-7.4 9.81 7.4-7.4-1.69-1.69-7.4 7.4v1.69h1.69ZM5 18.5h14V20H5v-1.5Z" />
+            </svg>
+          </button>
+        </header>
+        <ul id="noteList" class="note-list" role="listbox" aria-label="Notes"></ul>
+      </aside>
+
+      <main class="editor-pane">
+        <header class="editor-header">
+          <h2 id="noteTitle">Untitled</h2>
+          <div class="actions">
+            <span id="localError" class="local-error" hidden></span>
+            <button id="deleteNoteButton" class="text-button" type="button">
+              <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M9 3.5h6l.7 1.5H20v1.5H4V5h4.3L9 3.5Zm-2.5 5H8l.55 10h6.9L16 8.5h1.5l-.6 10.05A1.5 1.5 0 0 1 15.4 20h-6.8a1.5 1.5 0 0 1-1.5-1.45L6.5 8.5Zm3.25 1.25h1.5v7h-1.5v-7Zm3 0h1.5v7h-1.5v-7Z" />
+              </svg>
+              <span>Delete</span>
+            </button>
+            <button id="connectButton" class="text-button" type="button" data-state="local">
+              <span class="sync-dot" aria-hidden="true"></span>
+              <span id="connectButtonLabel">Connect</span>
+            </button>
+          </div>
+        </header>
+        <textarea id="editor" class="editor" spellcheck="true" placeholder="Start writing..." disabled></textarea>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
