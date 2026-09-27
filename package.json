@@ -1,7 +1,7 @@
 {
   "name": "example-app-note",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "Apache-2.0",
   "author": "OPENTECH AI PTE. LTD.",
   "homepage": "https://github.com/myfield-one/example-app-note",
@@ -19,7 +19,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@myfield/sdk": "0.9.0"
+    "@myfield/sdk": "0.9.1"
   },
   "devDependencies": {
     "typescript": "5.5.4",
