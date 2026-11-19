@@ -1,9 +1,5 @@
 # Changelog
 
-## Unreleased
-
-- Include `/v0.1.2/` in versioned deployments and show a 404 page for unknown paths.
-
 ## 0.1.2
 
 - Upgrade to MyField SDK 0.9.2 and use Instance APIs for connection and access restoration.
