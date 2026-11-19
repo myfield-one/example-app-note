@@ -15,11 +15,10 @@ Live demo: <https://example-app-note.myfield.one>
 
 ## What It Demonstrates
 
-- Create a local SDK instance with `createInstance()`.
-- Create an explicit app-owned bucket with
-  `instance.createBucket({ id: "example-app-note.myfield.one" })`.
-- Read and write note objects locally before the user connects an account.
-- Use `bucket.resume()` on startup and `bucket.connect()` from a user action.
+- Create an SDK instance with `createInstance()`.
+- Access its Local bucket with `instance.getBucket()`.
+- Read and write notes locally before connecting.
+- Use `instance.resume()` on startup and `instance.connect()` from a user action.
 - Use `bucket.list({ prefix: "note:" })` to render a note list from the
   SDK's internal encrypted bucket index.
 - Store each note as one object: `note:<uuid>` with fields `{ markdown }`.
@@ -33,6 +32,8 @@ Live demo: <https://example-app-note.myfield.one>
 npm install
 npm run dev
 ```
+
+Set `MYFIELD_AUTH_URL` to use a custom authorization page.
 
 ## Versioned deployment
 
@@ -49,16 +50,18 @@ for independent data.
 ```ts
 import { createInstance } from "@myfield/sdk";
 
-const instance = createInstance({ namespace: "default" });
-const bucket = instance.createBucket({ id: "example-app-note.myfield.one" });
-
-await bucket.resume();
+const instance = createInstance({
+  appId: "example-app-note.myfield.one",
+  namespace: "default",
+});
+const bucket = instance.getBucket();
 
 await bucket.update("note:1", { markdown: "# Hello" });
 const note = await bucket.get("note:1");
 const notes = await bucket.list({ prefix: "note:" });
 
-await bucket.connect();
+void instance.resume().catch(console.error);
+await instance.connect(); // Call from the Connect button.
 ```
 
 Local reads and writes work without a network connection or Myfield account.
