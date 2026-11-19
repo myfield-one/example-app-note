@@ -18,8 +18,8 @@ const connectButton = requireElement("connectButton") as HTMLButtonElement;
 const connectButtonLabel = requireElement("connectButtonLabel");
 const localErrorEl = requireElement("localError");
 
-const instance = createInstance({ namespace: "default" });
-const bucket: Bucket = instance.createBucket({ id: BUCKET_ID });
+const instance = createInstance({ appId: BUCKET_ID, namespace: "default", authUrl: MYFIELD_AUTH_URL });
+const bucket: Bucket = instance.getBucket();
 const notes = createNoteRepository(bucket, deriveTitle);
 
 let noteIndex: NoteIndex = [];
@@ -36,7 +36,7 @@ let syncUiState: SyncUiState = "local";
 let activeSyncInFlight: Promise<void> | null = null;
 let lastActiveSyncAt = 0;
 
-bucket.on("state", handleBucketState);
+instance.on("state", (state, error) => handleBucketState(state, error ? formatError(error) : undefined));
 bucket.on("change", (objectId) => {
   if (!loaded) return;
   void handleBucketChange(objectId);
@@ -68,7 +68,7 @@ window.addEventListener("focus", () => {
 });
 
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible" && bucket.state === "connected") {
+  if (document.visibilityState === "visible" && instance.state === "connected") {
     syncWhenPageBecomesActive();
   }
 });
@@ -79,15 +79,15 @@ async function boot(): Promise<void> {
   setSyncState("local");
   setLocalError(null);
   try {
-    await bucket.resume();
+    await refreshNotes();
+    const initialNoteId = newestNoteId();
+    if (initialNoteId) await openNote(initialNoteId);
+    else openDraftNote();
+    renderNoteList();
   } catch (error) {
-    setSyncState("local", formatError(error));
+    setLocalError(formatError(error));
   }
-  await refreshNotes();
-  const initialNoteId = newestNoteId();
-  if (initialNoteId) await openNote(initialNoteId);
-  else openDraftNote();
-  renderNoteList();
+  void instance.resume().catch(error => setSyncState("local", formatError(error)));
 }
 
 async function refreshNotes(): Promise<void> {
@@ -236,22 +236,22 @@ async function saveOpenNote(): Promise<void> {
 async function connectSync(): Promise<void> {
   setSyncState("connecting");
   try {
-    await bucket.connect(MYFIELD_AUTH_URL ? { authBase: MYFIELD_AUTH_URL } : undefined);
+    await instance.connect();
   } catch (error) {
     setSyncState("error", formatError(error));
   }
 }
 
 async function disconnectSync(): Promise<void> {
-  await bucket.disconnect();
+  await instance.disconnect();
 }
 
 function syncWhenPageBecomesActive(): void {
-  if (bucket.state !== "connected") return;
+  if (instance.state !== "connected") return;
   const now = Date.now();
   if (activeSyncInFlight || now - lastActiveSyncAt < ACTIVE_SYNC_THROTTLE_MS) return;
   lastActiveSyncAt = now;
-  activeSyncInFlight = bucket.sync().finally(() => {
+  activeSyncInFlight = bucket.sync().catch(error => handleBucketState(instance.state, formatError(error))).finally(() => {
     activeSyncInFlight = null;
   });
   void activeSyncInFlight;
@@ -260,7 +260,7 @@ function syncWhenPageBecomesActive(): void {
 function handleBucketState(state: BucketState, detail?: string): void {
   if (state === "connected") {
     syncConnected = true;
-    setSyncState("connected");
+    setSyncState("connected", detail);
     return;
   }
   if (state === "connecting") {
