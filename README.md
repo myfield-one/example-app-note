@@ -45,6 +45,14 @@ each commit must match its `vVERSION` Git tag. Add releases after creating their
 Versions on the same origin share local data. Use separate profiles or origins
 for independent data.
 
+## Deployment
+
+Cloudflare Pages: production branch `release`, build command `npm run build`,
+output `dist`. Other branches deploy as previews; set `MYFIELD_AUTH_URL` in
+the Preview environment to use test authorization.
+
+Merge approved changes from `main` into `release` to publish.
+
 ## Core SDK Usage
 
 ```ts
