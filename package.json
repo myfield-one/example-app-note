@@ -16,11 +16,9 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "node scripts/build-versions.mjs",
-    "build:app": "vite build",
-    "build:preview": "NOTE_PREVIEW_CURRENT=1 npm run build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "test:build": "npm run build:preview && NOTE_PREVIEW_CURRENT=1 node --test test/build.test.mjs"
+    "test:build": "npm run build && node --test test/build.test.mjs"
   },
   "dependencies": {
     "@myfield/sdk": "0.9.1"

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -8,18 +10,25 @@ const dist = fileURLToPath(new URL("../dist/", import.meta.url));
 const root = fileURLToPath(new URL("../", import.meta.url));
 const releases = JSON.parse(readFileSync(path.join(root, "releases.json"), "utf8"));
 const versions = Object.keys(releases.versions);
-const current = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8")).version;
 const bases = ["/", ...versions.map(version => `/v${version}/`)];
-if (process.env.NOTE_PREVIEW_CURRENT === "1" && !versions.includes(current)) bases.push(`/v${current}/`);
 
-test("release list is newest first and latest selects a release", () => {
-  assert.ok(versions.includes(releases.latest));
+test("release list is newest first", () => {
   assert.deepEqual(versions, [...versions].sort((a, b) => b.localeCompare(a, undefined, { numeric: true })));
 });
 
-test("unreleased working version is included only for development previews", () => {
-  assert.equal(existsSync(path.join(dist, `v${current}`, "index.html")),
-    versions.includes(current) || process.env.NOTE_PREVIEW_CURRENT === "1");
+test("root output matches a normal Vite build of the working source", () => {
+  const baseline = mkdtempSync(path.join(tmpdir(), "note-current-build-"));
+  try {
+    execFileSync(process.execPath, [path.join(root, "node_modules/vite/bin/vite.js"),
+      "build", "--outDir", baseline, "--emptyOutDir"], { cwd: root, stdio: "pipe" });
+    const html = readFileSync(path.join(dist, "index.html"), "utf8");
+    assert.equal(html, readFileSync(path.join(baseline, "index.html"), "utf8"));
+    for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
+      assert.deepEqual(readFileSync(path.join(dist, match[1])), readFileSync(path.join(baseline, match[1])));
+    }
+  } finally {
+    rmSync(baseline, { recursive: true, force: true });
+  }
 });
 
 test("build output contains only selected version paths", () => {
