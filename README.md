@@ -47,13 +47,11 @@ for independent data.
 
 ## Deployment
 
-For Git-integrated Cloudflare Pages, use `release` as the production branch,
-`npm run build` as the build command, and `dist` as the output directory.
-Enable previews for all other branches; set `MYFIELD_AUTH_URL` in the Preview
-environment to use a test Auth page.
+Cloudflare Pages: production branch `release`, build command `npm run build`,
+output `dist`. Other branches deploy as previews; set `MYFIELD_AUTH_URL` in
+the Preview environment to use test authorization.
 
-After reviewing changes on `main`, merge the approved commit into `release`
-to publish. Updating `main` alone produces a preview.
+Merge approved changes from `main` into `release` to publish.
 
 ## Core SDK Usage
 
