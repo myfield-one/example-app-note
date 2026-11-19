@@ -23,7 +23,7 @@ try {
   for (const [version, commit] of entries) {
     const tag = `refs/tags/v${version}`;
     try {
-      git(["rev-parse", "--verify", `${tag}^{commit}`]);
+      git(["rev-parse", "--verify", "--quiet", `${tag}^{commit}`]);
     } catch {
       git(["fetch", "--no-tags", "origin", `${tag}:${tag}`]);
     }
