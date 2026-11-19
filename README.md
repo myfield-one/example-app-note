@@ -15,11 +15,10 @@ Live demo: <https://example-app-note.myfield.one>
 
 ## What It Demonstrates
 
-- Create an instance with appId `example-app-note.myfield.one` and obtain its
-  Local bucket through `instance.getBucket()`.
-- Read and write note objects locally before the user connects an account.
-- Read local notes first, then restore access with `instance.resume()` in the
-  background. Use `instance.connect()` from a user action.
+- Create an SDK instance with `createInstance()`.
+- Access its Local bucket with `instance.getBucket()`.
+- Read and write notes locally before connecting.
+- Use `instance.resume()` on startup and `instance.connect()` from a user action.
 - Use `bucket.list({ prefix: "note:" })` to render a note list from the
   SDK's internal encrypted bucket index.
 - Store each note as one object: `note:<uuid>` with fields `{ markdown }`.
@@ -33,6 +32,8 @@ Live demo: <https://example-app-note.myfield.one>
 npm install
 npm run dev
 ```
+
+Set `MYFIELD_AUTH_URL` to use a custom authorization page.
 
 ## Versioned deployment
 
@@ -65,10 +66,6 @@ await instance.connect(); // Call from the Connect button.
 
 Local reads and writes work without a network connection or Myfield account.
 Connecting only adds encrypted multi-device sync.
-
-The existing storage namespace and bucket id are retained. The canonical Note
-host keeps its identity scope; other preview hosts may need authorization again.
-Set `MYFIELD_AUTH_URL` to use a custom Auth page.
 
 ## App Structure
 
