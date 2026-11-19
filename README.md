@@ -34,6 +34,16 @@ npm install
 npm run dev
 ```
 
+## Versioned deployment
+
+`npm run build` builds the current app at `/` and adds historical releases from
+`releases.json` at `/vVERSION/`. The list records versions and commits newest first;
+each commit must match its `vVERSION` Git tag. Add releases after creating their tags.
+
+`npm run preview` serves `dist/`; `npm run dev` runs the current app as before.
+Versions on the same origin share local data. Use separate profiles or origins
+for independent data.
+
 ## Core SDK Usage
 
 ```ts
@@ -69,7 +79,7 @@ easy to inspect.
 
 ```sh
 npm run typecheck
-npm run build
+npm run test:build
 ```
 
 ## Before Reuse

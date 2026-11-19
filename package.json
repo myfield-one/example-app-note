@@ -15,8 +15,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "build": "node scripts/build-versions.mjs",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test:build": "npm run build && node --test test/build.test.mjs"
   },
   "dependencies": {
     "@myfield/sdk": "0.9.1"
