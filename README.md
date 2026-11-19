@@ -34,6 +34,23 @@ npm install
 npm run dev
 ```
 
+## Versioned deployment
+
+`releases.json` lists published versions and full commit IDs, newest first.
+`latest` selects the version served at `/`; each listed version also has its
+own `/vVERSION/` path. Builds verify that each `vVERSION` Git tag matches the
+listed commit, then use that release's source and npm lockfile. Shallow clones
+may fetch missing tags.
+
+- `npm run build`: published versions only, ready for static hosting from `dist/`.
+- `npm run build:preview`: also adds the working version at `/vVERSION/` if unreleased.
+- `npm run preview`: serves the built paths. `npm run dev` serves the working app only.
+
+Add a version to the JSON and update `latest` after its release commit and tag
+are established. Until then it is available only in development previews.
+All paths on one origin share local data; paths do not isolate browser storage.
+Use separate browser profiles or origins for independent test data.
+
 ## Core SDK Usage
 
 ```ts
@@ -69,7 +86,7 @@ easy to inspect.
 
 ```sh
 npm run typecheck
-npm run build
+npm run test:build
 ```
 
 ## Before Reuse
