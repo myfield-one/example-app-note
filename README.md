@@ -1,8 +1,8 @@
-# Myfield Note Example
+# MyField Note Example
 
 A small local-first notes app built with `@myfield/sdk`.
 
-This reference demo shows how an external static web app can use a Myfield
+This reference demo shows how an external static web app can use a MyField
 bucket for offline-first object storage, end-to-end encrypted sync, and
 user-controlled authorization. The app owns the note UI and object model; the
 SDK owns local persistence, auth, encryption, merge, object-id blinding, and
@@ -72,7 +72,7 @@ void instance.resume().catch(console.error);
 await instance.connect(); // Call from the Connect button.
 ```
 
-Local reads and writes work without a network connection or Myfield account.
+Local reads and writes work without a network connection or MyField account.
 Connecting only adds encrypted multi-device sync.
 
 ## App Structure
